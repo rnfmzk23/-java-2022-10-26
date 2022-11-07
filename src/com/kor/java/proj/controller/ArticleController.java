@@ -1,19 +1,59 @@
 package com.kor.java.proj.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.kor.java.proj.dto.Article;
 import com.kor.java.proj.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 
 	private Scanner sc;
 	private List<Article> articles;
+	String command;
+	String actionName;
 	
-	public ArticleController(Scanner sc, List<Article> articles) {
+	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		this.articles = articles;
+		
+		articles = new ArrayList<Article>();
+	}
+	
+	public void makeTestData() {
+		System.out.println("테스트를 위한 데이터를 생성합니다.");
+		articles.add(new Article(1, "제목1", "aaaa", Util.getNowDateStr()));
+		articles.add(new Article(2, "제목2", "bbbb", Util.getNowDateStr()));
+		articles.add(new Article(3, "제목3", "cccc", Util.getNowDateStr()));
+	}
+	
+	public void doAction (String command, String actionName) {
+		this.command = command;
+		this.actionName = actionName;
+		
+		switch(actionName) {
+		
+		case "write" :
+			dowrite();
+			break;
+		
+		case "list" :
+			showlist();
+			break;
+			
+		case "detail" :
+			showdetail();
+			break;
+			
+		case "delete" :
+			dodelete();
+			break;
+			
+		case "modify" :
+			domodify();
+			break;
+		}
 	}
 	
 	public void dowrite() {
@@ -47,7 +87,7 @@ public class ArticleController {
 		}
 	}
 
-	public void showdetail(String command) {
+	public void showdetail() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]); // "1" -> 1
 
@@ -67,7 +107,7 @@ public class ArticleController {
 		System.out.printf("조회 : %d\n", foundArticle.hit);		
 	}
 	
-	public void dodelete(String command) {
+	public void dodelete() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]); // "1" -> 1
 		
@@ -82,7 +122,7 @@ public class ArticleController {
 		System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);		
 	}
 	
-	public void domodify(String command) {
+	public void domodify() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]); // "1" -> 1
 		
